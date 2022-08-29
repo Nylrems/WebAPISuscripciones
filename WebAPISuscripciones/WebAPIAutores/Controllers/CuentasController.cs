@@ -25,15 +25,17 @@ namespace WebAPIAutores.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
         private readonly SignInManager<IdentityUser> signInManager;
-        
+        private readonly ServicioLlaves servicioLlaves;
 
         public CuentasController(UserManager<IdentityUser> userManager,
             IConfiguration configuration,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager, 
+            ServicioLlaves servicioLlaves)
         {
             this.userManager = userManager;
             this.configuration = configuration;
-            this.signInManager = signInManager;            
+            this.signInManager = signInManager;
+            this.servicioLlaves = servicioLlaves;
         }        
 
         [HttpPost("registrar")] // api/cuentas/registrar
@@ -45,7 +47,9 @@ namespace WebAPIAutores.Controllers
 
             if (resultado.Succeeded)
             {
-                return await ConstruirToken(credencialesUsuario);
+                await servicioLlaves.CrearLlaves(usuario.Id, Entidades.TipoLlave.Gratuita);
+
+                return await ConstruirToken(credencialesUsuario, usuario.Id);
             }
             else
             {
@@ -61,7 +65,8 @@ namespace WebAPIAutores.Controllers
 
             if (resultado.Succeeded)
             {
-                return await ConstruirToken(credencialesUsuario);
+                var usuario = await userManager.FindByEmailAsync(credencialesUsuario.Email);
+                return await ConstruirToken(credencialesUsuario, usuario.Id);
             }
             else
             {
@@ -75,12 +80,16 @@ namespace WebAPIAutores.Controllers
         {
             var emailClaim = HttpContext.User.Claims.Where(claim => claim.Type == "email").FirstOrDefault();
             var email = emailClaim.Value;
+
+            var idClaim = HttpContext.User.Claims.Where(Claim => Claim.Type == "id").FirstOrDefault();
+            var usuarioId = emailClaim.Value;
+
             var credencialesUsuario = new CredencialesUsuario()
             {
                 Email = email
             };
 
-            return await ConstruirToken(credencialesUsuario);
+            return await ConstruirToken(credencialesUsuario, usuarioId);
         }
 
         private async Task<RespuestaAutenticacion> ConstruirToken(CredencialesUsuario credencialesUsuario, string usuarioId)

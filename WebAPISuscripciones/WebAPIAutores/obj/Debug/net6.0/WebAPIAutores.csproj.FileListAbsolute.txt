@@ -67,3 +67,8 @@ C:\Users\smerlyn garcia\source\repos\WebAPISuscripciones\WebAPISuscripciones\Web
 C:\Users\smerlyn garcia\source\repos\WebAPISuscripciones\WebAPISuscripciones\WebAPIAutores\obj\Debug\net6.0\WebAPIAutores.pdb
 C:\Users\smerlyn garcia\source\repos\WebAPISuscripciones\WebAPISuscripciones\WebAPIAutores\obj\Debug\net6.0\WebAPIAutores.genruntimeconfig.cache
 C:\Users\smerlyn garcia\source\repos\WebAPISuscripciones\WebAPISuscripciones\WebAPIAutores\obj\Debug\net6.0\ref\WebAPIAutores.dll
+C:\Users\smerlyn garcia\source\repos\WebAPISuscripciones\WebAPISuscripciones\WebAPIAutores\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\smerlyn garcia\source\repos\WebAPISuscripciones\WebAPISuscripciones\WebAPIAutores\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\smerlyn garcia\source\repos\WebAPISuscripciones\WebAPISuscripciones\WebAPIAutores\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\smerlyn garcia\source\repos\WebAPISuscripciones\WebAPISuscripciones\WebAPIAutores\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\smerlyn garcia\source\repos\WebAPISuscripciones\WebAPISuscripciones\WebAPIAutores\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
