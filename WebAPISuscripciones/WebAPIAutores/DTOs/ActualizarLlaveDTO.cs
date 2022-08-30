@@ -4,6 +4,6 @@ namespace WebAPIAutores.DTOs
     {
         public int LlaveId { get; set; }
         public bool ActualizarLlave { get; set; }
-        public bool Actica { get; set; }
+        public bool Activa { get; set; }
     }
 }

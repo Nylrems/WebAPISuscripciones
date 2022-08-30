@@ -77,7 +77,7 @@ namespace WebAPIAutores.Controllers
                 llaveDB.Llave = servicioLlaves.GenerarLlave(); 
             }
 
-            llaveDB.Activa = actualizarLlaveDTO.Actica;
+            llaveDB.Activa = actualizarLlaveDTO.Activa;
             await context.SaveChangesAsync();
             return NoContent();
         }
