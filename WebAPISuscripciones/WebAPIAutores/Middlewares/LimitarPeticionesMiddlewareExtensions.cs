@@ -54,7 +54,10 @@ namespace WebAPIAutores.Middlewares
             }
             var llave = llavesStringValues[0];
 
-            var llaveDB = await context.LlaveAPIs.FirstOrDefaultAsync(x => x.Llave == llave);
+            var llaveDB = await context.LlaveAPIs
+            .Include(x => x.RestriccionesDominio)
+            .Include(x => x.RestriccionesIP)
+            .FirstOrDefaultAsync(x => x.Llave == llave);
 
             if (llaveDB == null)
             {
@@ -85,11 +88,75 @@ namespace WebAPIAutores.Middlewares
                 }
             }
 
+            var superaRestricciones = PeticionSuperaAlgunaDeLasPeticiones(llaveDB, httpContext);
+
+            if (!superaRestricciones)
+            {
+                httpContext.Response.StatusCode = 403;
+                return;
+            }
+
             var peticion = new Peticion() { LlaveId = llaveDB.Id, FechaPeticion = DateTime.UtcNow };
             context.Add(peticion);
             await context.SaveChangesAsync();
 
             await siguiente(httpContext);
+        }
+
+        private bool PeticionSuperaAlgunaDeLasPeticiones(LlaveAPI llaveAPI, HttpContext httpContext)
+        {
+            var hayRestricciones = llaveAPI.RestriccionesDominio.Any() || llaveAPI.RestriccionesIP.Any();
+
+            if (!hayRestricciones)
+            {
+                return true;
+            }
+
+            var peticionSuperaLasRestriccionesDeDominio =
+                    PeticionSuperaLasRestriccionesDeDominio(llaveAPI.RestriccionesDominio, httpContext);
+
+            var peticionSuperaLasRestriccionesDeIP = 
+                    PeticionSuperaLasRestriccionesDeIP(llaveAPI.RestriccionesIP, httpContext);
+
+            return peticionSuperaLasRestriccionesDeDominio || peticionSuperaLasRestriccionesDeIP;
+        }
+
+        private bool PeticionSuperaLasRestriccionesDeIP(List<RestriccionIP> restricciones, HttpContext httpContext)
+        {
+            if (restricciones == null || restricciones.Count == 0)
+            {
+                return false;
+            }
+
+            var IP = httpContext.Connection.RemoteIpAddress.ToString();
+
+            if (IP == string.Empty)
+            {
+                return false;
+            }
+
+            var superaRestricciones = restricciones.Any(x => x.IP == IP);
+            return superaRestricciones;  
+        }
+
+        private bool PeticionSuperaLasRestriccionesDeDominio(List<RestriccionDominio> restricciones, HttpContext httpContext)
+        {
+            if (restricciones == null || restricciones.Count == 0)
+            {
+                return false;
+            }
+            var referer = httpContext.Request.Headers["Referer"].ToString();
+
+            if (referer == string.Empty)
+            {
+                return false;
+            }
+
+            Uri myUri = new Uri(referer);
+            string host = myUri.Host;
+
+            var superRestriccion = restricciones.Any(x => x.Dominio == host);
+            return superRestriccion;
         }
     }
 }
