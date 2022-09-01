@@ -8,7 +8,7 @@ using WebAPIAutores.Entidades;
 
 namespace WebAPIAutores.Utilidades
 {
-    public class AutoMapperProfiles: Profile
+    public class AutoMapperProfiles : Profile
     {
         public AutoMapperProfiles()
         {
@@ -28,6 +28,8 @@ namespace WebAPIAutores.Utilidades
             CreateMap<Comentario, ComentarioDTO>();
 
             CreateMap<LlaveAPI, LlaveDTO>();
+
+            CreateMap<RestriccionDominio, RestriccionDominioDTO>();
         }
 
         private List<LibroDTO> MapAutorDTOLibros(Autor autor, AutorDTO autorDTO)
@@ -44,7 +46,7 @@ namespace WebAPIAutores.Utilidades
                     Titulo = autorLibro.Libro.Titulo
                 });
             }
-
+            
             return resultado;
         }
 

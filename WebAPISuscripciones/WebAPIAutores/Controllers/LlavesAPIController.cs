@@ -30,7 +30,8 @@ namespace WebAPIAutores.Controllers
         public async Task<List<LlaveDTO>> MisLlaves()
         {
             var usuarioId = ObtenerUsuarioId();
-            var llaves = await context.LlaveAPIs.Where(x => x.usuarioId == usuarioId).ToListAsync();
+            var llaves = await context.LlaveAPIs
+            .Include(x => x.RestriccionesDominio).Where(x => x.usuarioId == usuarioId).ToListAsync();
             return mapper.Map<List<LlaveDTO>>(llaves);
         }
 
@@ -74,7 +75,7 @@ namespace WebAPIAutores.Controllers
 
             if (actualizarLlaveDTO.ActualizarLlave)
             {
-                llaveDB.Llave = servicioLlaves.GenerarLlave(); 
+                llaveDB.Llave = servicioLlaves.GenerarLlave();
             }
 
             llaveDB.Activa = actualizarLlaveDTO.Activa;
