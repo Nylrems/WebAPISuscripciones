@@ -9,7 +9,7 @@ namespace WebAPIAutores.Controllers
 {
     [ApiController]
     [Route("api/restriccionesip")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RestriccionesIPController : CustomBaseController
     {
         private readonly ApplicationDbContext context;
@@ -29,9 +29,9 @@ namespace WebAPIAutores.Controllers
                 return NotFound();
             }
 
-            var usuarioId = ObtenerUsuarioId();
+            var UsuarioId = ObtenerUsuarioId();
 
-            if (llaveDB.usuarioId != usuarioId)
+            if (llaveDB.usuarioId != UsuarioId)
             {
                 return Forbid();
             }

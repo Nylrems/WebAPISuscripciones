@@ -24,7 +24,7 @@ namespace WebAPIAutores.Middlewares
         private readonly RequestDelegate siguiente;
         private readonly ILogger<LoguearRespuestaHTTPMiddleware> logger;
 
-        public LoguearRespuestaHTTPMiddleware(RequestDelegate siguiente, 
+        public LoguearRespuestaHTTPMiddleware(RequestDelegate siguiente,
             ILogger<LoguearRespuestaHTTPMiddleware> logger)
         {
             this.siguiente = siguiente;
